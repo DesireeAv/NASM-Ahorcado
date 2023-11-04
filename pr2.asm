@@ -30,7 +30,7 @@
     shl     rdx, 32           ; Shift the high 32 bits to the left
     or      rax, rdx          ; Combine low and high parts into rax
     xor     rdx, rdx          ; Clear rdx for division
-    mov     rcx, 5            ; 5 for generating numbers from 1 to 5
+    mov     rcx, 1            ; 5 for generating numbers from 1 to 5
     div     rcx               ; Divide rax by rcx
     add     dl, '0'           ; Convert the result to ASCII (1 to 5)
     mov     [%1], dl          ; Store the random number in "aleatorio"
@@ -97,6 +97,8 @@ pidoLetra: db 10, 'Ingrese la letra a adivinar: ', 0
 longpidoLetra: equ $-pidoLetra
 
 
+gameover: db 10, 'Game over', 0
+longgameover: equ $-gameover
 
 
 
@@ -206,7 +208,8 @@ global _start
 _start:
 
 Inicio:
-    xor al, al
+    xor al, al          ; limpia los registros de el numero de palabra
+    xor cl, cl          ; limpia el registro de longitud de string
     xor esi, esi
     xor edi, edi
     imprimeEnPantalla menuInicio, longMenu
@@ -240,17 +243,34 @@ iniciar_juego:
 dif_baja:                   ; se selecciona un numero random
     palabraRandom randInt   ; genera el numero random
     cmp byte [randInt], '1'
-    jl palabra_pa1          ; estos van a hacer los que mueven las palabras a los diferentes registros
-    je palabra_pa2
+    jl palabra_pa1A          ; estos van a hacer los que mueven las palabras a los diferentes registros
+    je palabra_pa2A
     cmp byte [randInt], '2'
-    je palabra_pa3
+    je palabra_pa3A
     cmp byte [randInt], '3'
-    je palabra_pa4
-    jg palabra_pa5
+    je palabra_pa4A
+    jg palabra_pa5A
 
 
+palabra_pa1A:
+    mov rcx, 5
+    jmp palabra_pa1
 
-    ;jmp SALIR
+palabra_pa2A:
+    mov rcx, 6
+    jmp palabra_pa2
+
+palabra_pa3A:
+    mov rcx, 6
+    jmp palabra_pa3
+
+palabra_pa4A:
+    mov rcx, 6
+    jmp palabra_pa4
+
+palabra_pa5A:
+    mov rcx, 8
+    jmp palabra_pa5
 
 
      
@@ -258,31 +278,70 @@ dif_baja:                   ; se selecciona un numero random
 dif_media:
     palabraRandom randInt
     cmp byte [randInt], '1'
-    jl palabra_pb1          ; estos van a hacer los que mueven las palabras a los diferentes registros
-    je palabra_pb2
+    jl palabra_pb1B          ; estos van a hacer los que mueven las palabras a los diferentes registros
+    je palabra_pb2B
     cmp byte [randInt], '2'
-    je palabra_pb3
+    je palabra_pb3B
     cmp byte [randInt], '3'
-    je palabra_pb4
-    jg palabra_pb5
+    je palabra_pb4B
+    jg palabra_pb5B
 
-    ;jmp SALIR
 
+palabra_pb1B:
+    mov rcx, 11
+    jmp palabra_pb1
+
+palabra_pb2B:
+    mov rcx, 11
+    jmp palabra_pb2
+
+palabra_pb3B:
+    mov rcx, 10
+    jmp palabra_pb3
+
+palabra_pb4B:
+    mov rcx, 12
+    jmp palabra_pb4
+
+palabra_pb5B:
+    mov rcx, 12
+    jmp palabra_pb5
 
 
 
 dif_alta:
     palabraRandom randInt
     cmp byte [randInt], '1'
-    jl palabra_pc1                      ; estos van a hacer los que mueven las palabras a los diferentes registros
-    je palabra_pc2
+    jl palabra_pc1c                      ; estos van a hacer los que mueven las palabras a los diferentes registros
+    je palabra_pc2c
     cmp byte [randInt], '2'
-    je palabra_pc3
+    je palabra_pc3c
     cmp byte [randInt], '3'
-    je palabra_pc4
-    jg palabra_pc5
+    je palabra_pc4c
+    jg palabra_pc5c
 
     ;jmp SALIR
+
+
+palabra_pc1c:
+    mov rcx,13 
+    jmp palabra_pc1
+
+palabra_pc2c:
+    mov rcx, 19
+    jmp palabra_pc2
+
+palabra_pc3c:
+    mov rcx, 16
+    jmp palabra_pc3
+
+palabra_pc4c:
+    mov rcx, 14
+    jmp palabra_pc4
+
+palabra_pc5c:
+    mov rcx, 23
+    jmp palabra_pc5
 
 
 
@@ -297,12 +356,13 @@ palabra_pa1:                            ; estos son los que mueven las palabras 
     xor ebx, ebx
     xor ecx, ecx
     xor edx, edx
-    imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa1l, longpa1
-    mov al, 5                                   ; en al esta la cantidad de turnos restantes o disponibles
+    imprimeEnPantalla Palabra, longPalabra      ; imprime "Palabra: "
+    imprimeEnPantalla pa1l, 10
+    ;mov al, 5                                   ; en al esta la cantidad de turnos restantes o disponibles
+    mov rdx, longpa1
     mov esi, pa1
     mov edi, pa1l
-    jmp comp_letras
+    jmp comp_letraspa1
 
 palabra_pa2:
     imprimeEnPantalla difA, longdifA
@@ -314,10 +374,11 @@ palabra_pa2:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pa2l, longpa2
-    mov al,6
+    ;mov al,6
+    mov rdx, longpa2
     mov esi, pa2
     mov edi, pa2l
-    jmp comp_letras
+    jmp comp_letraspa2
 
 palabra_pa3:
     imprimeEnPantalla difA, longdifA
@@ -326,10 +387,11 @@ palabra_pa3:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pa3l, longpa3
-    mov al, 6
+    ;mov al, 6
+    mov rdx, longpa3
     mov esi, pa3
     mov edi, pa3l
-    jmp comp_letras
+    jmp comp_letraspa3
 
 palabra_pa4:
     imprimeEnPantalla difA, longdifA
@@ -341,10 +403,11 @@ palabra_pa4:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pa4l, longpa4
-    mov al, 6
+    ;mov al, 6
+    mov rdx, longpa4
     mov esi, pa4
     mov edi, pa4l
-    jmp comp_letras
+    jmp comp_letraspa4
 
 palabra_pa5:
     imprimeEnPantalla difA, longdifA
@@ -356,10 +419,11 @@ palabra_pa5:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pa5l, longpa5
-    mov al, 8
+    ;mov al, 8
+    mov rdx, longpa5
     mov esi, pa5
     mov edi, pa5l
-    jmp comp_letras
+    jmp comp_letraspa5
 
 
 
@@ -376,7 +440,8 @@ palabra_pb1:                ; estos son los que mueven las palabras a los difere
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pb1l, longpb1
-    mov al, 11
+    ;mov al, 11
+    mov rdx, longpb1
     mov esi, pb1
     mov edi, pb1l
     jmp comp_letras
@@ -391,7 +456,8 @@ palabra_pb2:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pb2l, longpb2
-    mov al, 11
+    ;mov al, 11
+    mov rdx, longpb2
     mov esi, pb2
     mov edi, pb2l
     jmp comp_letras
@@ -406,7 +472,8 @@ palabra_pb3:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pb3l, longpb3
-    mov al,10
+    ;mov al,10
+    mov rdx, longpb3
     mov esi, pb3
     mov edi, pb3l
     jmp comp_letras
@@ -421,7 +488,8 @@ palabra_pb4:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pb4l, longpb4
-    mov al,12
+    ;mov al,12
+    mov rdx, longpb4
     mov esi, pb4
     mov edi, pb4l
     jmp comp_letras
@@ -436,7 +504,8 @@ palabra_pb5:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pb5l, longpb5
-    mov al, 12
+    ;mov al, 12
+    mov rdx, longpb5
     mov esi, pb5
     mov edi, pb5l
     jmp comp_letras
@@ -456,7 +525,8 @@ palabra_pc1:                ; estos son los que mueven las palabras a los difere
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pc1l, longpc1
-    mov al, 13
+    ;mov al, 13
+    mov rdx, longpc1
     mov esi, pc1
     mov edi, pc1l
     jmp comp_letras
@@ -471,7 +541,8 @@ palabra_pc2:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pc2l, longpc2
-    mov al, 19
+    ;mov al, 19
+    mov rdx, longpc2
     mov esi, pc2
     mov edi, pc2l
     jmp comp_letras
@@ -486,7 +557,8 @@ palabra_pc3:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pc3l, longpc3
-    mov al, 16
+    ;mov al, 16
+    mov rdx, longpc3
     mov esi, pc3
     mov edi, pc3l
     jmp comp_letras
@@ -501,7 +573,8 @@ palabra_pc4:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pc4l, longpc4
-    mov al, 14
+    ;mov al, 14
+    mov rdx, longpc4
     mov esi, pc4
     mov edi, pc4l
     jmp comp_letras
@@ -516,7 +589,8 @@ palabra_pc5:
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
     imprimeEnPantalla pc5l, longpc5
-    mov al, 23
+    ;mov al, 23
+    mov rdx, longpc5
     mov esi, pc5
     mov edi, pc5l
     jmp comp_letras
@@ -524,46 +598,236 @@ palabra_pc5:
 
 
 
-comp_letras:
+
+
+
+
+
+
+
+
+
+comp_letraspa1:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    xor bl, bl
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
-    jmp compara_letra
-
-compara_letra:
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
-    cmp byte[entrada], 10
-    je letra_no_en_la_palabla
-    cmp bl, byte[esi]                               ; se compara la entrada con la letra actual
-    jne letras_no_iguales
-    je letras_iguales
+    jmp compara_letrapa1
 
 
-letra_no_en_la_palabla:
+compara_letrapa1:
+    cmp rcx, 0
+    je PERDIO
+    cmp byte[esi], 0
+    je palabra_revisadapa1      ; si ya se acabo el string(caracter 10), imprime lo que hay en esi y vuelve a pedir la entrada
+    cmp byte[esi], bl
+    jne no_en_este_guion
+    mov byte[edi], bl           ;cambia en los guiones la letra
+    inc edi                     ; avanza 2 en los guiones
+    inc esi                     ; avanza 2 en la palabra
+    ;jmp palabra_revisadapa1
+    jmp compara_letrapa1
+
+
+palabra_revisadapa1:
+    sub rcx, 1
+    xor edi, edi
+    xor esi, esi
+    dec al
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    jmp palabra_pa1
+
+
+no_en_este_guion:
+    inc esi
+    inc edi
+    jmp compara_letrapa1
+
+
+PERDIO:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla gameover, longgameover
     jmp SALIR
 
-letras_iguales:
-    mov byte[edi], bl
-    mov byte[edi], 2
-    limpiaRegistros
-    ;mov pa3, edi
-    imprimeEnPantalla edi, longpa3
-    mov byte[esi], 2
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+comp_letraspa2:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla pidoLetra, longpidoLetra
+    leeTeclado
+    mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
+    jmp compara_letrapa2
+
+
+compara_letrapa2:
+    cmp byte[esi], 10
+    je palabra_revisadapa2     ; si ya se acabo el string(caracter 10), imprime lo que hay en esi y vuelve a pedir la entrada
+    cmp byte[esi], bl
+    jne no_en_este_guion
+    mov byte[edi], bl   ;cambia en los guiones la letra
+    mov edi, 2          ; avanza 2 en los guiones
+    mov esi, 2          ; avanza 2 en la palabra
+    jmp palabra_revisadapa1
+
+
+palabra_revisadapa2:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla edi, longpa2      ; imprime en pantalla ls guiones modificados
     jmp SALIR
 
 
-letras_no_iguales:
-    ;sub al, 1                                       ; aqui va restandole uno a la cantidad 
-                                                    ;de turnos que le quedan disponibles
-    cmp al, 0
-    je no_tiene_jugadas_disponibles
 
-    mov byte[esi], 2
-    cmp byte[esi], 
-    ;imprimeEnPantalla pidoLetra, longpidoLetra
-    ;leeTeclado
 
-    ;jmp compara_letra
+
+
+
+
+
+comp_letraspa3:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla pidoLetra, longpidoLetra
+    leeTeclado
+    mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
+    jmp compara_letrapa3
+
+
+compara_letrapa3:
+    cmp byte[esi], 10
+    je palabra_revisadapa3     ; si ya se acabo el string(caracter 10), imprime lo que hay en esi y vuelve a pedir la entrada
+    cmp byte[esi], bl
+    jne no_en_este_guion
+    mov byte[edi], bl   ;cambia en los guiones la letra
+    mov edi, 2          ; avanza 2 en los guiones
+    mov esi, 2          ; avanza 2 en la palabra
+    jmp palabra_revisadapa1
+
+
+palabra_revisadapa3:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla edi, longpa3      ; imprime en pantalla ls guiones modificados
+    jmp SALIR
+
+
+
+
+
+comp_letraspa4:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla pidoLetra, longpidoLetra
+    leeTeclado
+    mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
+    jmp compara_letrapa4
+
+
+compara_letrapa4:
+    cmp byte[esi], 10
+    je palabra_revisadapa4     ; si ya se acabo el string(caracter 10), imprime lo que hay en esi y vuelve a pedir la entrada
+    cmp byte[esi], bl
+    jne no_en_este_guion
+    mov byte[edi], bl   ;cambia en los guiones la letra
+    mov edi, 2          ; avanza 2 en los guiones
+    mov esi, 2          ; avanza 2 en la palabra
+    jmp palabra_revisadapa1
+
+
+palabra_revisadapa4:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla edi, longpa4      ; imprime en pantalla ls guiones modificados
+    jmp SALIR
+
+
+
+
+comp_letras:
+    jmp SALIR
+
+
+
+
+
+comp_letraspa5:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla pidoLetra, longpidoLetra
+    leeTeclado
+    mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
+    jmp compara_letrapa5
+
+
+compara_letrapa5:
+    cmp byte[esi], 10
+    je palabra_revisadapa5     ; si ya se acabo el string(caracter 10), imprime lo que hay en esi y vuelve a pedir la entrada
+    cmp byte[esi], bl
+    jne no_en_este_guion
+    mov byte[edi], bl   ;cambia en los guiones la letra
+    mov edi, 2          ; avanza 2 en los guiones
+    mov esi, 2          ; avanza 2 en la palabra
+    jmp palabra_revisadapa1
+
+
+palabra_revisadapa5:
+    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+    imprimeEnPantalla edi, longpa5      ; imprime en pantalla ls guiones modificados
+    jmp SALIR
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
