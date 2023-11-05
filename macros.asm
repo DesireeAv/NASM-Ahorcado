@@ -7,14 +7,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Si se vna a realizar nuevas macros para un proyecto definirlas aca
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Las siguientes macros se pueden utilizar para los proyectos, si es el caso no modificar las mismas
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	;objetivo de la macro: imprimir un texto en pantalla
-	;ejemplo de funcionamiento: imprimeEnPantalla variableEnMemoria variableEnMemoria
-	;ejemplo de uso:            imprimeEnPantalla mensaje longitudMensaje
+        ; Objetivo de la macro: imprimir una cadena de texto en pantalla por medio de la salida estándar
+        ; Recibe 2 parámetros: el mensaje a imprimir, y la longitud del mensaje
         %macro imprimeEnPantalla 2
                 mov     eax, sys_write     	; opción 4 de las interrupciones del kernel.
                 mov     ebx, stdout        	; standar output.
@@ -23,11 +17,18 @@
                 int     0x80
         %endmacro
 
-	;objetivo de la macro: captura un dato ASCII ingresado por teclado por parte del usuario y almacena la entrada en la variable de memoria "entrada"
-	
-	;ejemplo de funcionamiento: leeTeclado
-	;ejemplo de uso:	    leeTeclado
+        ; Objetivo de la macro: cerrar el proceso en ejecución con el código de salida apropiado
+        ; se llama para evitar tener que colocar estas 3 líneas en cada punto de la ejecución que se quiere cerrar
+        %macro salir 0
+            mov eax,1
+		    mov ebx,0
+            int 80h
+        %endmacro
+
+        ; Objetivo de la macro: leer un mensaje (usualmente un solo caracter) del usuario por medio de la entrada estándar (terminal)
+        ; al usarla se asume que se ha declarado la variable 'entrada' ya que la utiliza internamente en lugar de tomarla como parámetro.
         %macro leeTeclado 0
+                mov byte [entrada], 0  ; Null-terminate the buffer before reading
                 mov     eax,     sys_read      ; opción 3 de las interrupciones del kernel.
                 mov     ebx,     stdin         ; standar input.
                 mov     ecx,     entrada       ; dirección de memoria reservada para almacenar la entrada del teclado.
@@ -35,87 +36,37 @@
                 int     0x80
         %endmacro
 
-	;objetivo de la macro: abre un archivo para su posterior uso
-	;ejemplo de funcionamiento: abreArchivo variableEnMemoria
-	;ejemplo de uso:	    abreArchivo nombreArchivo
-        %macro abreArchivo 1
-                mov     eax,     sys_open      ; opción 5 de las interrupciones del kernel.
-                mov     ebx,     %1            ; archivo por abrir.
-                mov     ecx,     0             ;
-                int     0x80
-        %endmacro
-
-	;objetivo de la macro: toma el archivo previamiente abierto con macro "abreArchivo" y almacena su contenido en la variable de memoria del primer parametro
-	;ejemplo de funcionamiento: leeArchivo variableEnMemoria
-	;emeplo de uso: leeArchivo contenidoArchivo
-	%macro leeArchivo 1 
-		mov     edx,  128              ; numero de bytes a leer (uno por cada caracter).
-        	mov     ecx,  %1               ; variable donde se almacena la información.
-       	 	mov     ebx,  eax              ; mueve el archivo abierto a ebx.
-        	mov     eax,  sys_read         ; invoca a sys_read (opción 3 de las interrupciones del kernel).
-       		int     0x80
-	%endmacro
-
-	;objetivo de la macro: toma una variable en memoria y despliega su contenido
-	;ejemplo de funcionamiento: despliegaContenidoArchivo variableEnMemoria
-	;ejemplo de uso: despliegaContenidoArchivo contenidoArchivo
-	%macro despliegaContenidoArchivo 1
-		mov ecx, %1
-	REPITA:
-      		mov eax, 4
-        	mov ebx, 1
-       		mov edx, 1
-        	int 80h
-
-		inc ecx
-		cmp cl,'0'
-		jne REPITA 
-	%endmacro
-
-        ;objetivo de la macro: cierra un archivo previamente abierto
-        ;ejemplo de funcionamiento: cierraArchivo variableMemoria
-        ;ejemplo de uso: cierraArchivo nombreArchivo
-	%macro cierraArchivo 1
-        	mov eax,  sys_close            ; Invoca a SYS_clOSE (opción 6 de las interrupciones del Kernel).
-		mov ebx,[%1]                   ; pasa el contenido de la variable de memoria hacia el registro ebx 
-		int     0x80	
-	%endmacro
-
-        ;objetivo de la macro: transfiere el contenido de "entrada" hacia otra variable definida como parametro1, "entrada" debe ser un unico digito.
-        ;ejemplo de funcionamiento: capturaASCII variableMemoria
-        ;ejemplo de uso: capturaASCII otraEntrada
-        %macro capturaASCII 1
-                mov     eax , [entrada]        ; pasa el contenido en la variable de memoria "entrada" y la transfiere al registro eax
-                mov     [%1],  eax             ; transfiere el contenido del registro eax hacia el contenido de la variable de memoria ingresada en el parametro uno
-        %endmacro
-
-        ;objetivo de la macro: transfiere el contenido de "entrada" hacia otra variable definida como parametro1, "entrada" debe ser un unico digito.
-	;ejemplo de funcionamiento: capturaNumero variableMemoria
-        ;ejemplo de uso: capturaNumero digitoNumerico
-        %macro capturaNumero 1
-                mov     eax, [entrada]         ; pasa el contenido en la variable de memoria "entrada" y la transfiere al registro eax quitando la parte ASCII
-                sub     eax, 48                ; realiza la resta eax - 48 , la idea es obtener el valor numerico del valor de entrada y no su correspondiente ASCII
-                mov     [%1], eax              ; transfiere el contenido del registro eax hacia el contenido de la variable de memoria ingresada en el parametro uno 
+        ; Objetivo de la macro: leer un mensaje de una longitud en caracteres específica desde la terminal.
+        ; el parámetro que recibe es la cantidad de bytes que va a leer.
+        %macro leePalabra 1
+                mov byte[palabra], 0
+                mov eax, sys_read
+                mov ebx, stdin
+                mov ecx, palabra
+                mov edx, %1     ; cantidad de bytes que viene del parámetro
+                int 0x80
         %endmacro
 
 
-        ;objetivo de la macro: sale del programa hacia la terminal
-        ;ejemplo de funcionamiento: salir
-        ;ejemplo de uso: salir
-        %macro salir 0
-                mov eax,1
-		mov ebx,0
-                int 80h
-        %endmacro
+; nasm -f elf64 ahorcado.asm -o ahorcado.o && ld ahorcado.o -o ahorcado
 
-	;objetivo de la macro: esta macro realiza una potenciacion, toma un numero en el primer parametro y lo eleva al segundo parametro
-	;ejemplo de funcionamiento: potencia base valorInmediato valorInmediato
-	;ejemplo de uso: potencia 2 3
-        %macro potencia 2
-                mov eax,%1
-                mov ecx,%2
-        ciclox:
-                imul eax
-                loop ciclox
-        %endmacro
+; Objetivo de la macro: generar un número aleatorio desde 0 a 4 en ASCII para seleccionar la palabra de forma aleatoria.
+; el parámetro que recibe es la variable o dirección en la que va a almacenar el número generado.
+%macro palabraRandom 1
+    rdtsc
+    shl     rdx, 32           ; Hace un "shift" de los 32 bits altos a la derecha
+    or      rax, rdx          ; Combina la parte baja con la alta en el rax
+    xor     rdx, rdx          ; Limpia el rdx para la división
+    mov     rcx, 5            ; 5 para generar números de 0 a 4 (lo que deja es el residuo)
+    div     rcx               ; Divide rax entre rcx
+    add     dl, '0'           ; Convierte el resultado a ASCII (de 0 a 4)
+    mov     [%1], dl          ; Almacena el número aleatorio en la variable parámetro
+%endmacro
 
+; Objetivo de la macro: limpia los registros de propósito general que se usan frecuentemente en el código.
+%macro limpiaRegistros 0
+    xor eax, eax                                
+    xor ebx, ebx
+    xor ecx, ecx
+    xor edx, edx
+%endmacro
