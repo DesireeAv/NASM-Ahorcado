@@ -1,7 +1,6 @@
-
 %include 'macros.asm'
 
-
+; nasm -f elf64 ahorcado.asm -o ahorcado.o && ld ahorcado.o -o ahorcado
 
 section .bss             ; donde se les asigna el tamaño de las variables
     entrada: resb 10     ; dígito de entrada
@@ -57,10 +56,10 @@ longPalabra: equ $-Palabra
 guessword: db 10,'Palabra a adivinar: ', 0
 longguessword: equ $-guessword
 
-palabraCompleta: db 10, 'Ha tecleado 3. Ingrese la palabra completa (1 intento): ', 0
+palabraCompleta: db 10, 'Ha tecleado 3. Ingrese la palabra completa y con espacios entre cada letra (1 intento): ', 0
 longPalabraCompleta: equ $-palabraCompleta
 
-perdioPorCompleta: db 10, 'Lo lamento, no tuviste suerte. Fin del juego.', 10
+perdioPorCompleta: db 10, 'Lo lamento, no tuvo suerte. Fin del juego.', 10
 longPerdioPorCompleta: equ $-perdioPorCompleta
 
 pidoLetra: db 10, 'Letra solicitada: ', 0
@@ -79,30 +78,35 @@ longgane: equ $-gane
 
 ; BAJA DIFICULTAD
 pa1: db 'R A T A S',10, 0
+copiapa1l: db '_ _ _ _ _',10, 0 
 pa1l: db '_ _ _ _ _',10, 0 ; 10 contando el caracter salto de linea
 longpa1: equ $-pa1l
 na1: db '5',10,0
 
 
 pa2: db 'Z A P A T O', 10, 0
+copiapa2l: db '_ _ _ _ _ _',10, 0
 pa2l: db '_ _ _ _ _ _',10, 0
 longpa2: equ $-pa2l
 na2: db '6',10,0
 
 
 pa3: db 'C H I C L E',10, 0
+copiapa3l: db '_ _ _ _ _ _', 10, 0
 pa3l: db '_ _ _ _ _ _', 10, 0
 longpa3: equ $-pa3l
 na3: db '6',10,0
 
 
 pa4: db 'P I C A D O', 10, 0
+copiapa4l: db '_ _ _ _ _ _', 10, 0
 pa4l: db '_ _ _ _ _ _', 10, 0
 longpa4: equ $-pa4l
 na4: db '6',10,0
 
 
 pa5: db 'D I S C R E T A', 10, 0
+copiapa5l: db '_ _ _ _ _ _ _ _', 10, 0
 pa5l: db '_ _ _ _ _ _ _ _', 10, 0
 longpa5: equ $-pa5l
 na5: db '8',10,0
@@ -112,26 +116,31 @@ na5: db '8',10,0
 
 ; MEDIA DIFICULTAD
 pb1: db 'I M A G I N A C I O N', 10, 0          ;11
+copiapb1l: db '_ _ _ _ _ _ _ _ _ _ _', 10, 0
 pb1l: db '_ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpb1: equ $-pb1l
 nb1: db '11',10,0
 
 pb2: db 'A U R I C U L A R E S', 10, 0
+copiapb2l: db '_ _ _ _ _ _ _ _ _ _ _', 10, 0
 pb2l: db '_ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpb2: equ $-pb2l
 nb2: db '11',10,0
 
 pb3: db 'L U X E M B U R G O', 10, 0            ;10
+copiapb3l: db '_ _ _ _ _ _ _ _ _ _', 10, 0
 pb3l: db '_ _ _ _ _ _ _ _ _ _', 10, 0
 longpb3: equ $-pb3l
 nb3: db '10',10,0
 
 pb4: db 'A R Q U I T E C T U R A', 10, 0         ;12
+copiapb4l: db '_ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 pb4l: db '_ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpb4: equ $-pb4l
 nb4: db '12',10,0
 
 pb5: db 'O S T E O P O R O S I S', 10, 0
+copiapb5l: db '_ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 pb5l: db '_ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpb5: equ $-pb5l
 nb5: db '12',10,0
@@ -140,27 +149,31 @@ nb5: db '12',10,0
 
 ; ALTA DIFICULTAD
 pc1: db 'I N D E P E N D E N C I A', 10, 0  ;13
-
+copiapc1l: db '_ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 pc1l: db '_ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpc1: equ $-pc1l
 nc1: db '13',10,0
 
 pc2: db 'O T O R R I N O L A R I N G O L O G O', 10, 0  ;19
+copiapc2l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 pc2l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpc2: equ $-pc2l
 nc2: db '19',10,0
 
 pc3: db 'E N C E F A L O R A Q U I D E O', 10, 0   ;16
+copiapc3l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 pc3l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpc3: equ $-pc3l
 nc3: db '16',10,0
 
 pc4: db 'P A R A L E L E P I P E D O', 10, 0 ; 14
+copiapc4l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0 ; 14
 pc4l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0 ; 14
 longpc4: equ $-pc4l
 nc4: db '14',10,0
 
 pc5: db 'E L E C T R O E N C E F A L O G R A F I S T A', 10, 0 ;23
+copiapc5l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 pc5l: db '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpc5: equ $-pc5l
 nc5: db '23',10,0
@@ -200,6 +213,10 @@ SALIR:
 ; Objetivo de la etiqueta: crear un punto en la lógica al que puede retornar el proceso cada vez que se escoge volver al menú de seleccionar dificultades.
 ; Al separar esta sección, se puede realizar un salto con instrucciones de control a esta sección.
 iniciar_juego:
+    xor al, al          ; limpia los registros de el numero de palabra
+    xor cl, cl          ; limpia el registro de longitud de string
+    xor esi, esi
+    xor edi, edi
     imprimeEnPantalla inicio, longIni
     imprimeEnPantalla MsgSalir, longMsgSalir
     ;imprimeEnPantalla '23', 2
@@ -610,7 +627,10 @@ comp_letraspa1:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego ; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropa1 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pa1l, copiapa1l
+
+saltar_macropa1:
     ; si no era escape, comparamos si metió un 3
     cmp byte[entrada], '3'
     je adivinarCompletapa1
@@ -700,7 +720,10 @@ comp_letraspa2:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropa2 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pa2l, copiapa2l
+
+saltar_macropa2:
     cmp byte[entrada], '3'
     je adivinarCompletapa2
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -785,7 +808,10 @@ comp_letraspa3:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropa3 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pa3l, copiapa3l
+
+saltar_macropa3:
     cmp byte[entrada], '3'
     je adivinarCompletapa3
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -864,7 +890,10 @@ comp_letraspa4:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropa4 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pa4l, copiapa4l
+
+saltar_macropa4:
     cmp byte[entrada], '3'
     je adivinarCompletapa4
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -945,7 +974,10 @@ comp_letraspa5:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropa5 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pa5l, copiapa5l
+
+saltar_macropa5:
     cmp byte[entrada], '3'
     je adivinarCompletapa5
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1033,7 +1065,10 @@ comp_letraspb1:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropb1 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pb1l, copiapb1l
+
+saltar_macropb1:
     cmp byte[entrada], '3'
     je adivinarCompletapb1
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1112,7 +1147,10 @@ comp_letraspb2:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropb2 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pb2l, copiapb2l
+
+saltar_macropb2:
     cmp byte[entrada], '3'
     je adivinarCompletapb2
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1196,7 +1234,10 @@ comp_letraspb3:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropb3 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pb3l, copiapb3l
+
+saltar_macropb3:
     cmp byte[entrada], '3'
     je adivinarCompletapb3
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1275,7 +1316,10 @@ comp_letraspb4:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropb4 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pb4l, copiapb4l
+
+saltar_macropb4:
     cmp byte[entrada], '3'
     je adivinarCompletapb4
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1356,7 +1400,10 @@ comp_letraspb5:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropb5 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pb5l, copiapb5l
+
+saltar_macropb5:
     cmp byte[entrada], '3'
     je adivinarCompletapb5
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1440,7 +1487,10 @@ comp_letraspc1:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropc1 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pc1l, copiapc1l
+
+saltar_macropc1:
     cmp byte[entrada], '3'
     je adivinarCompletapc1
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1519,7 +1569,10 @@ comp_letraspc2:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropc2 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pc2l, copiapc2l
+
+saltar_macropc2:
     cmp byte[entrada], '3'
     je adivinarCompletapc2
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1603,7 +1656,10 @@ comp_letraspc3:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropc3 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pc3l, copiapc3l
+
+saltar_macropc3:
     cmp byte[entrada], '3'
     je adivinarCompletapc3
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1682,7 +1738,10 @@ comp_letraspc4:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropc4 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pc4l, copiapc4l
+
+saltar_macropc4:
     cmp byte[entrada], '3'
     je adivinarCompletapc4
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1764,7 +1823,10 @@ comp_letraspc5:
     imprimeEnPantalla pidoLetra, longpidoLetra
     leeTeclado
     cmp byte[entrada], 27
-    je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
+    jne saltar_macropc5 ;vuelve a comparar si quiere salir al menú de entrada.
+    reestableceMensajeEnJuego pc5l, copiapc5l
+
+saltar_macropc5:
     cmp byte[entrada], '3'
     je adivinarCompletapc5
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
@@ -1854,7 +1916,21 @@ completaEquivocada:
     imprimeEnPantalla perdioPorCompleta, longPerdioPorCompleta
     jmp SALIR
 
+compara_caracteres_mensaje:
+    mov al, byte [esi]  ; Carga el caracter (1 byte) del mensaje a reestablecer
+    inc esi
+    mov bl, byte [edi]  ; Carga el caracter del mensaje referencia
+    inc edi
+    cmp al, 0           ; Si se alcanzó el final del mensaje, hacemos el salto que se realizaba originalmente, al menú de escoger dificultad.
+    je iniciar_juego
+    cmp al, bl           ; Compara los caracteres en ambos mensajes (en la posición actual)
+    jne reemplazar_char  ; Si son diferentes, salta a reemplazar_char que se encarga de copiar el original en el modificado.
+    jmp compara_caracteres_mensaje  ; Si no, entonces repite y sigue comparando.
 
+reemplazar_char:
+    mov al, byte [edi - 1]  ; Carga el caracter del mensaje de referencia al AL
+    mov byte [esi - 1], al  ; Reemplaza el caracter en el mensaje a corregir
+    jmp compara_caracteres_mensaje
 
 
 
