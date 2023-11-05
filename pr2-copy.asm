@@ -831,7 +831,7 @@ comp_letraspa3:
     cmp byte[entrada], 27
     je iniciar_juego; vuelve a comparar si quiere salir al menú de entrada.
     cmp byte[entrada], '3'
-    jmp adivinarCompletapa3
+    je adivinarCompletapa3
     mov bl, byte[entrada]                           ; se mueve a bl la letra a ingresar
     jmp compara_letrapa3
 
