@@ -15,6 +15,7 @@
         %endmacro
 
         %macro leeTeclado 0
+                mov byte [entrada], 0  ; Null-terminate the buffer before reading
                 mov     eax,     sys_read      ; opción 3 de las interrupciones del kernel.
                 mov     ebx,     stdin         ; standar input.
                 mov     ecx,     entrada       ; dirección de memoria reservada para almacenar la entrada del teclado.
@@ -24,6 +25,7 @@
 
         ; el parámetro que recibe es la cantidad de bytes que va a leer.
         %macro leePalabra 1
+                mov byte[palabra], 0
                 mov eax, sys_read
                 mov ebx, stdin
                 mov ecx, palabra
@@ -43,16 +45,6 @@
     div     rcx               ; Divide rax by rcx
     add     dl, '0'           ; Convert the result to ASCII (1 to 5)
     mov     [%1], dl          ; Store the random number in "aleatorio"
-%endmacro
-
-%macro esTeclaEscapeCerrarJuego 1
-    cmp byte[%1], 27
-    je cerrar_juego
-%endmacro
-
-%macro esTeclaEscapeJuegoIniciado 1
-    cmp byte[entrada], 27
-    je iniciar_juego
 %endmacro
 
 
@@ -180,7 +172,7 @@ pb2l: db '_ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpb2: equ $-pb2l
 nb2: db '11',10,0
 
-pb3: db 'L U X E M B U R G O ', 10, 0            ;10
+pb3: db 'L U X E M B U R G O', 10, 0            ;10
 pb3l: db '_ _ _ _ _ _ _ _ _ _ _ _', 10, 0
 longpb3: equ $-pb3l
 nb3: db '10',10,0
@@ -252,7 +244,8 @@ Inicio:
     xor edi, edi
     imprimeEnPantalla menuInicio, longMenu
     leeTeclado      ; carga la variable a entrada
-    esTeclaEscapeCerrarJuego entrada ; esta como se está presionando escape en el menú inicial, cierra el programa
+    cmp byte[entrada], 27 ; esta como se está presionando escape en el menú inicial, cierra el programa
+    je cerrar_juego
     cmp byte [entrada], '1' ; compara con el valor ASCII de 1
     je iniciar_juego
     jg cerrar_juego
@@ -296,23 +289,23 @@ dif_baja:
 
 
 palabra_pa1A:
-    mov r8, 4               ; lo que hace es pone la cantidad de intentos en la long de la palabras
+    mov r8, 5               ; lo que hace es pone la cantidad de intentos en la long de la palabras
     jmp palabra_pa1
 
 palabra_pa2A:
-    mov r8, 5
+    mov r8, 6
     jmp palabra_pa2
 
 palabra_pa3A:
-    mov r8, 5
+    mov r8, 6
     jmp palabra_pa3
 
 palabra_pa4A:
-    mov r8, 5
+    mov r8, 6
     jmp palabra_pa4
 
 palabra_pa5A:
-    mov r8, 7
+    mov r8, 8
     jmp palabra_pa5
 
 
@@ -332,23 +325,23 @@ dif_media:
 
 
 palabra_pb1B:
-    mov r8, 10
+    mov r8, 11
     jmp palabra_pb1
 
 palabra_pb2B:
-    mov r8, 10
+    mov r8, 11
     jmp palabra_pb2
 
 palabra_pb3B:
-    mov r8, 9
+    mov r8, 10
     jmp palabra_pb3
 
 palabra_pb4B:
-    mov r8, 11
+    mov r8, 12
     jmp palabra_pb4
 
 palabra_pb5B:
-    mov r8, 11
+    mov r8, 12
     jmp palabra_pb5
 
 
@@ -369,23 +362,23 @@ dif_alta:
 
 
 palabra_pc1c:
-    mov r8,12 
+    mov r8, 13
     jmp palabra_pc1
 
 palabra_pc2c:
-    mov r8, 18
+    mov r8, 19
     jmp palabra_pc2
 
 palabra_pc3c:
-    mov r8, 15
+    mov r8, 16
     jmp palabra_pc3
 
 palabra_pc4c:
-    mov r8, 13
+    mov r8, 14
     jmp palabra_pc4
 
 palabra_pc5c:
-    mov r8, 22
+    mov r8, 23
     jmp palabra_pc5
 
 
@@ -731,6 +724,7 @@ GANOpa1:
     jmp SALIR
 
 adivinarCompletapa1:
+    limpiaRegistros
     imprimeEnPantalla palabraCompleta, longPalabraCompleta ; para avisarle al usuario que tiene que poner toda la palabra
     leePalabra longpa1; versión modificada de leeTeclado para leer toda la palabra
     mov ecx, palabra
@@ -809,6 +803,7 @@ GANOpa2:
     jmp SALIR
     
 adivinarCompletapa2:
+    limpiaRegistros
     imprimeEnPantalla palabraCompleta, longPalabraCompleta ; para avisarle al usuario que tiene que poner toda la palabra
     leePalabra longpa2; versión modificada de leeTeclado para leer toda la palabra
     mov ecx, palabra
@@ -1290,7 +1285,7 @@ compara_palabras_looppb3:
     mov bl, byte[edi]
     inc edi
     cmp al, bl
-    jne palabra_pb4     ; si no on iguales, brinca a pedir again la entrada
+    jne palabra_pb3     ; si no on iguales, brinca a pedir again la entrada
     cmp al, 0           ; si se llego al final, gano la persona
     je GANOpb3
     jmp compara_palabras_looppb3       ; si no, siga pidiendo la entrada y todo normalmente
@@ -1369,7 +1364,7 @@ compara_palabras_looppb4:
     mov bl, byte[edi]
     inc edi
     cmp al, bl
-    jne palabra_pa1     ; si no on iguales, brinca a pedir again la entrada
+    jne palabra_pb4     ; si no on iguales, brinca a pedir again la entrada
     cmp al, 0           ; si se llego al final, gano la persona
     je GANOpa1
     jmp compara_palabras_looppb4       ; si no, siga pidiendo la entrada y todo normalmente
