@@ -1,5 +1,6 @@
 
-
+        ; Objetivo de la macro: imprimir una cadena de texto en pantalla por medio de la salida estándar
+        ; Recibe 2 parámetros: el mensaje a imprimir, y la longitud del mensaje
         %macro imprimeEnPantalla 2
                 mov     eax, sys_write     	; opción 4 de las interrupciones del kernel.
                 mov     ebx, stdout        	; standar output.
@@ -8,12 +9,16 @@
                 int     0x80
         %endmacro
 
+        ; Objetivo de la macro: cerrar el proceso en ejecución con el código de salida apropiado
+        ; se llama para evitar tener que colocar estas 3 líneas en cada punto de la ejecución que se quiere cerrar
         %macro salir 0
             mov eax,1
 		    mov ebx,0
             int 80h
         %endmacro
 
+        ; Objetivo de la macro: leer un mensaje (usualmente un solo caracter) del usuario por medio de la entrada estándar (terminal)
+        ; al usarla se asume que se ha declarado la variable 'entrada' ya que la utiliza internamente en lugar de tomarla como parámetro.
         %macro leeTeclado 0
                 mov byte [entrada], 0  ; Null-terminate the buffer before reading
                 mov     eax,     sys_read      ; opción 3 de las interrupciones del kernel.
@@ -23,6 +28,7 @@
                 int     0x80
         %endmacro
 
+        ; Objetivo de la macro: leer un mensaje de una longitud en caracteres específica desde la terminal.
         ; el parámetro que recibe es la cantidad de bytes que va a leer.
         %macro leePalabra 1
                 mov byte[palabra], 0
@@ -34,22 +40,24 @@
         %endmacro
 
 
-; nasm -f elf64 pr2.asm -o pr2.o && ld pr2.o -o pr2
+; nasm -f elf64 ahorcado.asm -o ahorcado.o && ld ahorcado.o -o ahorcado
 
+; Objetivo de la macro: generar un número aleatorio desde 0 a 4 en ASCII para seleccionar la palabra de forma aleatoria.
+; el parámetro que recibe es la variable o dirección en la que va a almacenar el número generado.
 %macro palabraRandom 1
     rdtsc
-    shl     rdx, 32           ; Shift the high 32 bits to the left
-    or      rax, rdx          ; Combine low and high parts into rax
-    xor     rdx, rdx          ; Clear rdx for division
-    mov     rcx, 5            ; 5 for generating numbers from 1 to 5
-    div     rcx               ; Divide rax by rcx
-    add     dl, '0'           ; Convert the result to ASCII (1 to 5)
-    mov     [%1], dl          ; Store the random number in "aleatorio"
+    shl     rdx, 32           ; Hace un "shift" de los 32 bits altos a la derecha
+    or      rax, rdx          ; Combina la parte baja con la alta en el rax
+    xor     rdx, rdx          ; Limpia el rdx para la división
+    mov     rcx, 5            ; 5 para generar números de 0 a 4 (lo que deja es el residuo)
+    div     rcx               ; Divide rax entre rcx
+    add     dl, '0'           ; Convierte el resultado a ASCII (de 0 a 4)
+    mov     [%1], dl          ; Almacena el número aleatorio en la variable parámetro
 %endmacro
 
-
+; Objetivo de la macro: limpia los registros de propósito general que se usan frecuentemente en el código.
 %macro limpiaRegistros 0
-    xor eax, eax                                ; limpia los registros de imprimeEnPantalla
+    xor eax, eax                                
     xor ebx, ebx
     xor ecx, ecx
     xor edx, edx
@@ -57,10 +65,10 @@
 
 
 
-section .bss            ; donde se les asigna el tama;o de las variables
-    entrada: resb 10     ; digito de entrada
-    randInt: resb 1         ; variable del numero random
-    palabra: resb 43    ; 43 es la longitud máxima de bytes de las palabras a adivinar
+section .bss             ; donde se les asigna el tamaño de las variables
+    entrada: resb 10     ; dígito de entrada
+    randInt: resb 1      ; variable del numero random
+    palabra: resb 43     ; 43 es la longitud máxima de bytes de las palabras a adivinar
 
 
 
@@ -221,25 +229,13 @@ nc5: db '23',10,0
 
 
 
-
-; preguntas: hay que cambiar lo de los intentos para que sea longitud + 1 porque con ratas me falló a las 5 letras
-; estoy esperando que el profe me conteste a ver si se tienen que agregar al arreglo de letras solicitadas las que la persona también acertó.
-; también hay que cambiar que la cantidad de turnos posibles no baje si la letra está bien
-; para reiniciar las palabras y que se puedan volver a jugar sin que salgan iniciadas:
-; - se puede hacer una copia del valor que se va modificando y que antes de reiniciar la vara, el mae vaya limpiando donde se jugó
-; - para que así si toca la misma palabra cuando se vuelve a jugar, salga limpio el espacio
-; se hace comparando con la copia del original y que donde en el original haya un guion bajo, ponga un guion bajo en el que se usa.
-
-
-
-
-
 section .text
 
 global _start
 
 _start:
 
+; Objetivo de la etiqueta: segmentar la parte del código que denota el inicio de la aplicación, es decir, el menú inicial.
 Inicio:
     xor al, al          ; limpia los registros de el numero de palabra
     xor cl, cl          ; limpia el registro de longitud de string
@@ -263,6 +259,8 @@ cerrar_juego:
 SALIR:
     salir
 
+; Objetivo de la etiqueta: crear un punto en la lógica al que puede retornar el proceso cada vez que se escoge volver al menú de seleccionar dificultades.
+; Al separar esta sección, se puede realizar un salto con instrucciones de control a esta sección.
 iniciar_juego:
     imprimeEnPantalla inicio, longIni
     imprimeEnPantalla MsgSalir, longMsgSalir
@@ -271,11 +269,11 @@ iniciar_juego:
     cmp byte[entrada], 27
     je cerrar_juego     ; se devuelve a la terminal
     cmp byte [entrada], '2'
-    jl dif_baja
+    jl dif_baja         ; si era menor que 2 es porque se escogió la dificultad 1.
     je dif_media
     cmp byte [entrada], '3'
     je dif_alta
-    jg Inicio
+    jg Inicio           ; cualquier valor mayor que 3 salta al inicio del programa.
 
 
 dif_baja:
@@ -283,7 +281,7 @@ dif_baja:
                        ; se selecciona un numero random
     palabraRandom randInt   ; genera el numero random
     cmp byte [randInt], '1'
-    jl palabra_pa1A          ; estos van a hacer los que mueven las palabras a los diferentes registros
+    jl palabra_pa1A          ; estos van a ser los que mueven las palabras a los diferentes registros
     je palabra_pa2A
     cmp byte [randInt], '2'
     je palabra_pa3A
@@ -291,9 +289,9 @@ dif_baja:
     je palabra_pa4A
     jg palabra_pa5A
 
-
+;Objetivo de las siguientes secciones: pone la cantidad de intentos en la long de la palabras más uno.
 palabra_pa1A:
-    mov r8, 5               ; lo que hace es pone la cantidad de intentos en la long de la palabras
+    mov r8, 5               
     jmp palabra_pa1
 
 palabra_pa2A:
@@ -327,7 +325,7 @@ dif_media:
     je palabra_pb4B
     jg palabra_pb5B
 
-
+;Objetivo de las siguientes secciones: pone la cantidad de intentos en la long de la palabras más uno.
 palabra_pb1B:
     mov r8, 11
     jmp palabra_pb1
@@ -364,7 +362,7 @@ dif_alta:
 
     ;jmp SALIR
 
-
+;Objetivo de las siguientes secciones: pone la cantidad de intentos en la long de la palabras más uno.
 palabra_pc1c:
     mov r8, 13
     jmp palabra_pc1
@@ -663,7 +661,8 @@ palabra_pc5:
 
 
 
-
+; Objetivo de la etiqueta: comparar las letras ingresadas con la palabra 1 de la dificultad 1. Las otras etiquetas con este formato tienen el mismo
+; propósito pero para palabras diferentes.
 comp_letraspa1:
     xor eax, eax                                ; limpia los registros de imprimeEnPantalla
     xor ebx, ebx
@@ -708,7 +707,7 @@ palabra_revisadapa1:
     mov edi, pa1l
     jmp compara_palabras_looppa1
 
-
+; Objetivo de la etiqueta: saltar de índice en el mensaje cuando no se está en una posición que debe reemplazarse.
 no_en_este_guionpa1:
     inc esi
     inc edi
@@ -733,7 +732,7 @@ compara_palabras_looppa1:
 
 
 
-
+; Objetivo de la etiqueta: imprimir cuando el jugador ganó en condiciones para la palabra 1 dificultad baja. 
 GANOpa1:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
