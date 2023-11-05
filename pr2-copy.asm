@@ -1042,7 +1042,7 @@ compara_palabras_looppa5:
 GANOpa5:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa1, 17
+    imprimeEnPantalla pa5, 17
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1366,7 +1366,7 @@ compara_palabras_looppb4:
     cmp al, bl
     jne palabra_pb4     ; si no on iguales, brinca a pedir again la entrada
     cmp al, 0           ; si se llego al final, gano la persona
-    je GANOpa1
+    je GANOpb4
     jmp compara_palabras_looppb4       ; si no, siga pidiendo la entrada y todo normalmente
 
 GANOpb4:
