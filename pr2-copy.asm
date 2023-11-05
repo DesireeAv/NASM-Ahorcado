@@ -394,7 +394,7 @@ palabra_pa1:                            ; estos son los que mueven las palabras 
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra      ; imprime "Palabra: "
-    imprimeEnPantalla pa1l, 10
+    imprimeEnPantalla pa1l, 11
     xor edi, edi                ; limpia registros
     xor esi, esi                                ; en al esta la cantidad de turnos restantes o disponibles
     mov rdx, longpa1
@@ -410,7 +410,7 @@ palabra_pa2:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa2l, 12
+    imprimeEnPantalla pa2l, 13
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa2
@@ -423,7 +423,7 @@ palabra_pa3:
     imprimeEnPantalla na3, 2
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa3l, 12
+    imprimeEnPantalla pa3l, 13
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa3
@@ -439,7 +439,7 @@ palabra_pa4:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa4l, 12
+    imprimeEnPantalla pa4l, 13
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa4
@@ -455,7 +455,7 @@ palabra_pa5:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa5l, 14
+    imprimeEnPantalla pa5l, 15
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa5
@@ -561,7 +561,7 @@ palabra_pc1:                ; estos son los que mueven las palabras a los difere
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pc1l, 26
+    imprimeEnPantalla pc1l, 27
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpc1
@@ -577,7 +577,7 @@ palabra_pc2:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pc2l, 38
+    imprimeEnPantalla pc2l, 39
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpc2
@@ -609,7 +609,7 @@ palabra_pc4:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pc4l, 28
+    imprimeEnPantalla pc4l, 29
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpc4
@@ -625,7 +625,7 @@ palabra_pc5:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pc5l, 46
+    imprimeEnPantalla pc5l, 47
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpc5
@@ -718,7 +718,7 @@ compara_palabras_looppa1:
 GANOpa1:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa1, 10
+    imprimeEnPantalla pa1, 11
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -797,7 +797,7 @@ compara_palabras_looppa2:
 GANOpa2:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa2, 11
+    imprimeEnPantalla pa2, 12
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -874,7 +874,7 @@ compara_palabras_looppa3:
     mov bl, byte[edi]
     inc edi
     cmp al, bl
-    jne palabra_pa4     ; si no on iguales, brinca a pedir again la entrada
+    jne palabra_pa3     ; si no on iguales, brinca a pedir again la entrada
     cmp al, 0           ; si se llego al final, gano la persona
     je GANOpa3
     jmp compara_palabras_looppa3       ; si no, siga pidiendo la entrada y todo normalmente
@@ -882,7 +882,7 @@ compara_palabras_looppa3:
 GANOpa3:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa3, 11
+    imprimeEnPantalla pa3, 12
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -953,15 +953,15 @@ compara_palabras_looppa4:
     mov bl, byte[edi]
     inc edi
     cmp al, bl
-    jne palabra_pa1     ; si no on iguales, brinca a pedir again la entrada
+    jne palabra_pa4     ; si no on iguales, brinca a pedir again la entrada
     cmp al, 0           ; si se llego al final, gano la persona
-    je GANOpa1
+    je GANOpa4
     jmp compara_palabras_looppa4       ; si no, siga pidiendo la entrada y todo normalmente
 
 GANOpa4:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa4, 11
+    imprimeEnPantalla pa4, 12
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1042,7 +1042,7 @@ compara_palabras_looppa5:
 GANOpa5:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa1, 13
+    imprimeEnPantalla pa1, 14
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1130,7 +1130,7 @@ compara_palabras_looppb1:
 GANOpb1:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb1, 22
+    imprimeEnPantalla pb1, 23
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1209,7 +1209,7 @@ compara_palabras_looppb2:
 GANOpb2:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb2, 22
+    imprimeEnPantalla pb2, 23
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1293,7 +1293,7 @@ compara_palabras_looppb3:
 GANOpb3:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb3, 20
+    imprimeEnPantalla pb3, 21
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1372,7 +1372,7 @@ compara_palabras_looppb4:
 GANOpb4:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb4, 24
+    imprimeEnPantalla pb4, 29
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1453,7 +1453,7 @@ compara_palabras_looppb5:
 GANOpb5:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb5, 24
+    imprimeEnPantalla pb5, 47
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
@@ -1692,7 +1692,7 @@ compara_palabras_looppc3:
     mov bl, byte[edi]
     inc edi
     cmp al, bl
-    jne palabra_pc4     ; si no on iguales, brinca a pedir again la entrada
+    jne palabra_pc3     ; si no on iguales, brinca a pedir again la entrada
     cmp al, 0           ; si se llego al final, gano la persona
     je GANOpc3
     jmp compara_palabras_looppc3       ; si no, siga pidiendo la entrada y todo normalmente
@@ -1773,13 +1773,14 @@ compara_palabras_looppc4:
     cmp al, bl
     jne palabra_pc4     ; si no on iguales, brinca a pedir again la entrada
     cmp al, 0           ; si se llego al final, gano la persona
-    je GANOpc5
+    je GANOpc4
     jmp compara_palabras_looppc4       ; si no, siga pidiendo la entrada y todo normalmente
 
 GANOpc4:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pc4, 28
+    limpiaRegistros
+    imprimeEnPantalla pc4, 29
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
