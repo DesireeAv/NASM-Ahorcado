@@ -410,7 +410,7 @@ palabra_pa2:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa2l, 11
+    imprimeEnPantalla pa2l, 12
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa2
@@ -423,7 +423,7 @@ palabra_pa3:
     imprimeEnPantalla na3, 2
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa3l, 11
+    imprimeEnPantalla pa3l, 12
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa3
@@ -439,7 +439,7 @@ palabra_pa4:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa4l, 11
+    imprimeEnPantalla pa4l, 12
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa4
@@ -455,7 +455,7 @@ palabra_pa5:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa5l, 13
+    imprimeEnPantalla pa5l, 14
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa5
@@ -508,7 +508,7 @@ palabra_pb3:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb3l, 21
+    imprimeEnPantalla pb3l, 20
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpb3
@@ -524,7 +524,7 @@ palabra_pb4:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb4l, 23
+    imprimeEnPantalla pb4l, 24
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpb4
@@ -540,7 +540,7 @@ palabra_pb5:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pb5l, 23
+    imprimeEnPantalla pb5l, 24
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpb5
@@ -609,7 +609,7 @@ palabra_pc4:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pc4l, 29
+    imprimeEnPantalla pc4l, 28
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpc4
@@ -1950,7 +1950,6 @@ pedir_letra:
 
 
     ;cmp byte [entrada], '1'
-
 
 
 
