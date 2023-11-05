@@ -48,7 +48,7 @@
         %endmacro
 
 
-; nasm -f elf64 ahorcado.asm -o ahorcado.o && ld ahorcado.o -o ahorcado
+
 
 ; Objetivo de la macro: generar un número aleatorio desde 0 a 4 en ASCII para seleccionar la palabra de forma aleatoria.
 ; el parámetro que recibe es la variable o dirección en la que va a almacenar el número generado.
@@ -70,3 +70,14 @@
     xor ecx, ecx
     xor edx, edx
 %endmacro
+
+; Objetivo de la macro: volver a poner los guiones bajos en el mensaje para adivinar la palabra cuando se sale al menú principal.
+; esto con el objetivo de que si el jugador coincide con una palabra que ya estaba en juego y tenía letras acertadas, no aparezcan en sus siguientes intentos.
+%macro reestableceMensajeEnJuego 2
+    xor esi, esi     ; Limpia el ESI para guardar la dirección del mensaje a reestablecer
+    xor edi, edi     ; Limpia el EDI para almacenar la dirección del mensaje de referencia (la copia del original)
+    lea esi, [%1]    ; Carga la dirección del primer mensaje al ESI
+    lea edi, [%2]    ; Carga la dirección del segundo mensaje al EDI
+	jmp compara_caracteres_mensaje
+%endmacro
+
