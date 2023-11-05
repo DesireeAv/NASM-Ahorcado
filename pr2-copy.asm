@@ -455,7 +455,7 @@ palabra_pa5:
     xor ecx, ecx
     xor edx, edx
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa5l, 15
+    imprimeEnPantalla pa5l, 17
     xor edi, edi                ; limpia registros
     xor esi, esi
     mov rdx, longpa5
@@ -1042,7 +1042,7 @@ compara_palabras_looppa5:
 GANOpa5:
     limpiaRegistros
     imprimeEnPantalla Palabra, longPalabra
-    imprimeEnPantalla pa1, 14
+    imprimeEnPantalla pa1, 17
     limpiaRegistros
     imprimeEnPantalla gane, longgane
     jmp SALIR
