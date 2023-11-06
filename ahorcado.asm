@@ -246,23 +246,23 @@ dif_baja:
 
 ;Objetivo de las siguientes secciones: pone la cantidad de intentos en la long de la palabras más uno.
 palabra_pa1A:
-    mov r8, 5               
+    mov r8, 6      
     jmp palabra_pa1
 
 palabra_pa2A:
-    mov r8, 6
+    mov r8, 7
     jmp palabra_pa2
 
 palabra_pa3A:
-    mov r8, 6
+    mov r8, 7
     jmp palabra_pa3
 
 palabra_pa4A:
-    mov r8, 6
+    mov r8, 7
     jmp palabra_pa4
 
 palabra_pa5A:
-    mov r8, 8
+    mov r8, 9
     jmp palabra_pa5
 
 
@@ -282,23 +282,23 @@ dif_media:
 
 ;Objetivo de las siguientes secciones: pone la cantidad de intentos en la long de la palabras más uno.
 palabra_pb1B:
-    mov r8, 11
+    mov r8, 12
     jmp palabra_pb1
 
 palabra_pb2B:
-    mov r8, 11
+    mov r8, 12
     jmp palabra_pb2
 
 palabra_pb3B:
-    mov r8, 10
+    mov r8, 11
     jmp palabra_pb3
 
 palabra_pb4B:
-    mov r8, 12
+    mov r8, 13
     jmp palabra_pb4
 
 palabra_pb5B:
-    mov r8, 12
+    mov r8, 13
     jmp palabra_pb5
 
 
@@ -319,23 +319,23 @@ dif_alta:
 
 ;Objetivo de las siguientes secciones: pone la cantidad de intentos en la long de la palabras más uno.
 palabra_pc1c:
-    mov r8, 13
+    mov r8, 14
     jmp palabra_pc1
 
 palabra_pc2c:
-    mov r8, 19
+    mov r8, 20
     jmp palabra_pc2
 
 palabra_pc3c:
-    mov r8, 16
+    mov r8, 17
     jmp palabra_pc3
 
 palabra_pc4c:
-    mov r8, 14
+    mov r8, 15
     jmp palabra_pc4
 
 palabra_pc5c:
-    mov r8, 23
+    mov r8, 24
     jmp palabra_pc5
 
 
